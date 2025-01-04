@@ -1,0 +1,64 @@
+{
+  "breadcrumbs.enabled": true,
+  "cflint.enabled": false,
+  "editor.formatOnPaste": true,
+  "editor.links": false,
+  "editor.minimap.renderCharacters": false,
+  "editor.snippetSuggestions": "none",
+  "emmet.includeLanguages": {
+    "cfml": "html"
+  },
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/*.min.*": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.sql": true,
+    "**/.svn": true,
+    "WEB-INF": true,
+    "desktop.ini": true,
+    "files/emularity/**": true,
+    "files/json/*-*.json": false,
+    "files/sitemap/**": true,
+    "images/uuid/**": true,
+    "wayback": true,
+    "wheels": true
+  },
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext",
+    "cfml",
+    "javascript",
+    "yaml"
+  ],
+  "spellright.language": [
+    "en_US"
+  ],
+  "spellright.parserByClass": {
+    "cfml": {
+      "parser": "code"
+    },
+    "NGINX": {
+      "parser": "markdown"
+    },
+    "yaml": {
+      "parser": "markdown"
+    }
+  },
+  "spellright.spellContextByClass": {
+    "cfml": "comments"
+  },
+  "spellright.useDocumentSymbolsInCode": true,
+  "spellright.notificationClass": "hint",
+  "workbench.editor.closeOnFileDelete": true,
+  "search.exclude": {
+    "**/*.min.*": true,
+    "**/dump.sql": true,
+    "**/*~.cfc": true,
+    "**/*~.cfm": true,
+  }
+}

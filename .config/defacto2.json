@@ -1,0 +1,21 @@
+{
+  "email": {
+    "server": "smtp.gmail.com",
+    "username": "defacto2@example.com",
+    "password": "",
+    "address": {
+      "error": "error@example.com"
+    }
+  },
+  "mysql": {
+    "host": "db",
+    "database": "defacto2-inno",
+    "username": "root",
+    "password": "password"
+  },
+  "operator": {
+    "login": "true",
+    "bypass": "false"
+  },
+  "wheels": "password"
+}

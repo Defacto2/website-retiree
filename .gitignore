@@ -1,0 +1,30 @@
+# Defacto2-2020 Git ignore file #
+#################################
+# to remove existing files checked into the repo
+# git rm --cached <file>
+
+/.gitconfig
+
+# system files
+.DS_Store
+nppBackup*
+thumbs.db
+desktop.ini
+
+# npm/yarn
+.pnp.*
+.yarn
+.yarnrc.*
+node_modules
+package-lock.json
+yarn.lock
+
+# lucee
+ROOT/WEB-INF
+
+# website assets
+/ROOT/emulator
+/ROOT/files/html/*
+/ROOT/incoming
+/uuid
+config-lock.json

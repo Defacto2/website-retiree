@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "kamasamak.vscode-cflint",
+        "kamasamak.vscode-cfml",
+        "shanoor.vscode-nginx",
+        "mikeburgh.xml-format",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "formulahendry.auto-close-tag"
+    ]
+}

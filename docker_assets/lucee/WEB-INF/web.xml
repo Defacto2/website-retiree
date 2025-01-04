@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0">
+    <!-- ======================== Introduction ============================== -->
+    <!-- This document defines default values for *all* web applications      -->
+    <!-- loaded into this instance of Tomcat.  As each application is         -->
+    <!-- deployed, this file is processed, followed by the                    -->
+    <!-- "/WEB-INF/web.xml" deployment descriptor from your own               -->
+    <!-- applications.                                                        -->
+    <!--                                                                      -->
+    <!-- WARNING:  Do not configure application-specific resources here!      -->
+    <!-- They should go in the "/WEB-INF/web.xml" file in your application.   -->
+    <!-- ================== Built In Servlet Definitions ==================== -->
+    <!--  -->
+    <!-- removed -->
+    <!--  -->
+    <!-- ==================== Default Welcome File List ===================== -->
+    <!-- When a request URI refers to a directory, the default servlet looks  -->
+    <!-- for a "welcome file" within that directory and, if present, to the   -->
+    <!-- corresponding resource URI for display.                              -->
+    <!-- If no welcome files are present, the default servlet either serves a -->
+    <!-- directory listing (see default servlet configuration on how to       -->
+    <!-- customize) or returns a 404 status, depending on the value of the    -->
+    <!-- listings setting.                                                    -->
+    <!--                                                                      -->
+    <!-- If you define welcome files in your own application's web.xml        -->
+    <!-- deployment descriptor, that list *replaces* the list configured      -->
+    <!-- here, so be sure to include any of the default values that you wish  -->
+    <!-- to use within your application.                                       -->
+    <welcome-file-list>
+        <welcome-file>index.cfm</welcome-file>
+        <welcome-file>index.cfml</welcome-file>
+    </welcome-file-list>
+    <servlet id="Lucee">
+        <description>Lucee Engine</description>
+        <servlet-name>CFMLServlet</servlet-name>
+        <servlet-class>lucee.loader.servlet.CFMLServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CFMLServlet</servlet-name>
+        <url-pattern>/rewrite.cfm/*</url-pattern>
+        <url-pattern>*.cfc</url-pattern>
+        <url-pattern>*.cfm</url-pattern>
+        <url-pattern>*.cfml</url-pattern>
+        <url-pattern>/index.cfc/*</url-pattern>
+        <url-pattern>/index.cfm/*</url-pattern>
+        <url-pattern>/index.cfml/*</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,26 @@
+{
+  "rule": [],
+  "excludes": [
+    {
+      "code": "MISSING_SEMI"
+    },
+    {
+      "code": "STRUCT_ARRAY_NOTATION"
+    },
+    {
+      "code": "FUNCTION_HINT_MISSING"
+    },
+    {
+      "code": "ARG_HINT_MISSING_SCRIPT"
+    },
+    {
+      "code": "FUNCTION_TOO_COMPLEX"
+    },
+    {
+      "code": "VAR_IS_TEMPORARY"
+    }
+  ],
+  "includes": [],
+  "inheritParent": false,
+  "parameters": {}
+}

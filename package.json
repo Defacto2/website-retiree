@@ -1,0 +1,54 @@
+{
+  "author": "Ben Garrett",
+  "bugs": {
+    "url": "https://github.com/bengarrett/Defacto2-2020/issues"
+  },
+  "dependencies": {
+    "bootstrap": "~3.4.1",
+    "browserfs": "1.4.3",
+    "browserfs-zipfs-extras": "1.0.1",
+    "chart.js": "^4.4.7",
+    "choices.js": "^10.2.0",
+    "clipboard": "2.0.11",
+    "es6-promise": "4.2.8",
+    "file-saver-fixed": "1.3.8",
+    "hammerjs": "2.0.8",
+    "headroom.js": "~0.12.0",
+    "infinite-scroll": "~4.0.1",
+    "jquery": "^3.7.1",
+    "lite-youtube-embed": "^0.2.0",
+    "localforage": "1.10.0",
+    "moment": "2.29.4"
+  },
+  "description": "2020 update of defacto2.net",
+  "devDependencies": {
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "grunt": "^1.6.1",
+    "grunt-cli": "^1.4.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^5.0.0",
+    "grunt-contrib-less": "^3.0.0",
+    "grunt-eol": "^1.1.3",
+    "grunt-terser": "^2.0.0",
+    "load-grunt-tasks": "^5.1.0",
+    "postcss-html": "^1.6.0",
+    "postcss-less": "^6.0.0",
+    "prettier": "^3.2.5",
+    "stylelint": "^15.11.0",
+    "stylelint-config-recommended": "^12.0.0",
+    "stylelint-config-standard": "^33.0.0",
+    "terser": "^5.34.1"
+  },
+  "homepage": "https://github.com/bengarrett/Defacto2-2020#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "defacto2-2020",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bengarrett/Defacto2-2020.git"
+  },
+  "version": "1.0.0"
+}

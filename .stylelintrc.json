@@ -1,0 +1,18 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-recommended"],
+  "overrides": [
+    {
+      "files": ["**/*.less"],
+      "customSyntax": "postcss-less",
+      "rules": {
+        "declaration-block-no-redundant-longhand-properties": null,
+        "no-descending-specificity": null
+      }
+    },
+    {
+      "files": ["**/*.cfm", "**/*.htm"],
+      "customSyntax": "postcss-html",
+      "rules": {}
+    }
+  ]
+}

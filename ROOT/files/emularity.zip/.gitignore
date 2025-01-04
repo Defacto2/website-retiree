@@ -1,0 +1,4 @@
+*.zip
+!g_drive.zip
+!s_drive.zip
+!u_drive.zip

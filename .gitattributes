@@ -1,0 +1,38 @@
+wayback/* -crlf
+* text eol=lf
+
+# Declare text files
+*.cfm text eol=lf
+*.cfc text eol=lf
+*.css text eol=lf
+*.conf text eol=lf
+*.dict text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.map text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
+*.sql text eol=lf
+*.svg text eol=lf
+*.yml text eol=lf
+*.xml text eol=lf
+
+# Declare binary files
+*.bmp binary
+*.gif binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.mem binary
+*.pcx binary
+*.png binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+
+# To fix corrupted files
+# cd to root and run:
+# git add --renormalize .
+#
+# info: https://www.gloomycorner.com/line-ending-configuration-in-git/

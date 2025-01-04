@@ -1,0 +1,230 @@
+# Docker Compose file for Defacto2 on Digital Ocean
+# See .env for variable values
+#
+# To use, copy the appropriate operating system .ini from `env-configs`
+# and replace the docker compose .env environment file.
+#
+#
+# Any changes to this file requires a rebuild:
+# `docker compose build` or `docker compose up --build`
+#
+# To test changes:
+# `docker compose config`
+#
+# To list service containers:
+# docker compose config --services
+#
+# To list volumes:
+# docker compose config --volumes
+
+version: "3.7"
+services:
+  # MySQL 8 database server
+  # https://hub.docker.com/_/mysql
+  db:
+    labels:
+      net.defacto2.description: "Defacto2 database server"
+    # database image can be swapped out with the commented images
+    image: mysql:8-debian
+    cap_add: # temp fix: https://codehunter.cc/a/docker/how-to-fix-mbind-operation-not-permitted-in-mysql-error-log
+      - SYS_NICE # CAP_SYS_NICE
+    # about this arg: https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html
+    command: --max_allowed_packet=20M
+    container_name: $BASE_NAME-db
+    # load this container on host start-up
+    restart: $RESTART
+    # expose ports to the other containers and the network
+    ports:
+      - 3306:3306
+    volumes:
+      # store MySQL data on a docker volume
+      - mysql8:/var/lib/mysql
+      # automatically initialise database with this dataset
+      - $WD/docker_assets/import-data/create.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+    # internal container system variables
+    environment:
+      MYSQL_ROOT_PASSWORD: $PW_MYSQL
+    healthcheck:
+      test: 'mysql --password=$PW_MYSQL --database=defacto2-inno --execute "SELECT COUNT(*) FROM files;"'
+      interval: 10m
+      timeout: 10s
+      retries: 5
+
+  # Database management that is accessed via http://localhost:8558
+  # https://hub.docker.com/_/adminer
+  adminer:
+    labels:
+      net.defacto2.description: "Defacto2 database management"
+    image: adminer:latest
+    container_name: $BASE_NAME-adminer
+    restart: $RESTART
+    # override the default port 8080 that conflicts with the webapp container
+    # command source: https://github.com/TimWolla/docker-adminer/blob/master/4/Dockerfile
+    command: ["php", "-S", "[::]:$PORT_ADMINER", "-t", "/var/www/html"]
+    # expose ports to the network
+    ports:
+      - $PORT_ADMINER:$PORT_ADMINER
+    volumes:
+      - /var/www/html:/var/www/adminer
+
+  # JS and CSS dependencies via npm
+  # https://serverfault.com/questions/943168/share-node-modules-binary-between-containers-in-docker-compose
+  # https://hub.docker.com/_/node
+  npm:
+    labels:
+      net.defacto2.description: "Defacto2 npm dependencies"
+    image: "node:lts-alpine"
+    #user: "node"
+    container_name: $BASE_NAME-npm
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # this `node_modules` volume is will be shared with the `web` service
+      - type: volume
+        source: node_modules
+        target: /opt/node_modules
+      # share the Dosee repo package.json with this container
+      - type: bind
+        source: $WD/package.json
+        target: /opt/package.json
+    working_dir: /opt
+    # The npm command will self-update and run a security audit on start.
+    command: /bin/sh -c 'npm install --location=global npm --fund=false' && 'npm install --omit="dev" --fund=false'
+
+  # CFWheels MVC framework for Lucee
+  # https://cfwheels.org/
+  wheels:
+    labels:
+      wheels.description: "CFWheels 2"
+    container_name: $BASE_NAME-wheels
+    build: $WD/docker_assets/cfwheels
+    tty: false
+    volumes:
+      - type: volume
+        source: cf_wheels
+        target: /opt/cfwheels/wheels
+        read_only: true
+
+  # Web application using Lucee, Tomcat and nginx
+  # Web root: http://localhost or http://localhost:8888
+  # CFWheels debug: http://localhost?reload=true
+  # Lucee admin: http://localhost:8888/lucee/admin/ [disabled]
+  webapp:
+    labels:
+      net.defacto2.description: "Defacto2 web application"
+    container_name: $BASE_NAME-webapp
+    restart: $RESTART
+    build: $WD/docker_assets/lucee
+    depends_on:
+      - npm
+    # expose ports to the network
+    ports:
+      # web application ports
+      # ports 80/443 should be handled by a separate nginx proxy
+      # port 8560 mixes static assets (images/js/css) and CFML served by nginx
+      # port 8888 exclusively handles CFML rendered by the Lucee server
+      - 8560:8560
+      - 8888:8888
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8560/status.cfm"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 5m
+    environment:
+      - PORT_ADMINER=$PORT_ADMINER
+    # source attributes should be absolute paths
+    volumes:
+      #
+      # Local development install volumes
+      # https://github.com/bengarrett/Defacto2-docker
+      #
+      # web application CFWheels configurations
+      - type: bind
+        source: $CFWHEELS
+        target: /var/insecure/defacto2.json
+        read_only: true
+      # nginx directories and cache configuration
+      - type: bind
+        source: $LOCATIONS
+        target: /etc/nginx/conf.d/locations.conf
+        read_only: true
+      # nginx proxy rules and headers
+      - type: bind
+        source: $REWRITE
+        target: /etc/nginx/conf.d/rewrite.conf
+        read_only: true
+      #
+      # Standard volumes
+      #
+      # dependency libraries
+      - type: bind
+        source: $WD/lib
+        target: /opt/lib
+        read_only: true
+      # npm container volume containing dependency libraries
+      - type: volume
+        source: node_modules
+        target: /opt/node_modules
+      # web root
+      - type: bind
+        source: $WD/ROOT
+        target: /var/www
+        # never set this to true or it will block the volumes below
+        read_only: false
+      # URL rewriting rules used by CFWheels
+      - type: bind
+        source: $WD/docker_assets/lucee/WEB-INF
+        target: /var/www/WEB-INF
+        read_only: true
+      # nginx configuration
+      - type: bind
+        source: $WD/docker_assets/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: $WD/docker_assets/nginx
+        target: /etc/nginx/conf.d
+        read_only: true
+      - type: volume
+        source: cf_wheels
+        target: /var/www/wheels
+        read_only: false # must be kept to false!
+      # uuid files and downloads
+      - type: bind
+        source: $AD/downloads
+        target: /var/www/uuid
+      # generated images such as screenshots
+      - type: bind
+        source: $AD/images000
+        target: /var/www/images/uuid/original
+      - type: bind
+        source: $AD/images400
+        target: /var/www/images/uuid/400x400
+      # wayback worldwide web
+      - type: bind
+        source: $AD/waybackweb
+        target: /var/www/wayback
+        read_only: true
+      # emulation
+      - type: bind
+        source: $DD/disk_drives
+        target: /var/www/disk_drives
+        read_only: true
+      - type: bind
+        source: $DD/emulator
+        target: /var/www/emulator
+        read_only: true
+      - type: bind
+        source: $AD/downloads
+        target: /var/www/files/emularity
+      # tar archives for redistribution
+      - type: volume
+        source: archives
+        target: /opt/archives
+
+volumes:
+  archives:
+  cf_wheels:
+  mysql8:
+  node_modules:

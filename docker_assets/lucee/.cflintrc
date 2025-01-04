@@ -1,0 +1,11 @@
+{
+  "rule": [],
+  "excludes": [
+    {
+      "code": "AVOID_USING_CFDUMP_TAG"
+    }
+  ],
+  "includes": [],
+  "inheritParent": false,
+  "parameters": {}
+}
